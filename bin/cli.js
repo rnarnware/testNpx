@@ -13,7 +13,7 @@ const runCommand = command => {
 }
 
 const repoName = process.argv[2];
-const giCheckoutCommand = `git clone --depth 1 https://git.cogitate.us/rnarnaware/demo ${repoName}`
+const giCheckoutCommand = `git clone --depth 1 https://github.com/rnarnware/testNpx ${repoName}`
 const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`cloning the repo with name ${repoName}`);
