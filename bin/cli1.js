@@ -3,9 +3,9 @@ const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
 
-const runCommand = command => {
+const runCommand = (command, cwd) => {
     try {
-        execSync(`${command}`, { stdio: 'inherit'});
+        execSync(`${command}`, { stdio: 'inherit', cwd });
     } catch (e) {
         console.log('failed to exec ', e);
         return false;
@@ -15,33 +15,40 @@ const runCommand = command => {
 
 const repoName = process.argv[2];
 const folderName = process.argv[3];
-const gitCheckoutCommand = `git clone --depth 1 https://github.com/rnarnware/testNpx ${repoName}`;
-const installDepsCommand = `cd ${repoName} && npm install`;
+const tempArchivePath = path.join(__dirname, 'temp_archive.tar.gz');
+const gitRepoURL = 'https://github.com/rnarnware/testNpx'; // Replace with your repository URL
+const gitArchiveCommand = `git archive --format=tar.gz --output=${tempArchivePath} HEAD ${`src/${folderName}`}`;
+const extractCommand = `tar -xf ${tempArchivePath} -C .`;
+
+if (!repoName || !folderName) {
+    console.log('Usage: npx create-react-casper <repoName> <folderName>');
+    process.exit(-1);
+}
+
+const gitCheckoutCommand = `git clone --depth 1 ${gitRepoURL} ${repoName}`;
 
 console.log(`Cloning the repo with name ${repoName}`);
 const checkOut = runCommand(gitCheckoutCommand);
 
 if (!checkOut) process.exit(-1);
 
-console.log(`Installing dependencies for ${repoName}`);
+console.log(`Creating archive of ${folderName} in ${repoName}`);
+const archiveCreated = runCommand(gitArchiveCommand, repoName);
+
+if (!archiveCreated) process.exit(-1);
+
+console.log(`Extracting ${folderName}`);
+const extractionSuccess = runCommand(extractCommand);
+
+if (!extractionSuccess) process.exit(-1);
+
+console.log(`Installing dependencies for ${folderName}`);
+const installDepsCommand = `cd ${folderName} && npm install`;
 const installedDeps = runCommand(installDepsCommand);
 
 if (!installedDeps) process.exit(-1);
 
-if (folderName) {
-    console.log(`Copying specific folder: ${folderName}`);
-    const sourcePath = path.join(process.cwd(), repoName, 'src', folderName);
-    const destinationPath = path.join(process.cwd(), folderName);
-    console.log(sourcePath, "sourcePath");
+console.log(`Cleaning up temporary files`);
+fs.removeSync(tempArchivePath);
 
-    try {
-        fs.copySync(sourcePath, destinationPath, { overwrite: true });
-        console.log(`Copied ${folderName} to ${destinationPath}`);
-        console.log(`Congrats! Happy hacking in ${folderName}`);
-    } catch (err) {
-        console.error('Error copying the folder:', err);
-        process.exit(-1);
-    }
-} else {
-    console.log(`Congrats! Happy hacking in ${repoName}`);
-}
+console.log(`Congrats! Happy hacking in ${folderName}`);

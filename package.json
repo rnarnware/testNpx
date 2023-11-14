@@ -1,6 +1,6 @@
 {
   "name": "create-react-rohit",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "bin": "./bin/cli.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
