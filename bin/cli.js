@@ -5,7 +5,7 @@ const path = require('path');
 
 const runCommand = command => {
     try {
-        execSync(`${command}`, { stdio: 'inherit' });
+        execSync(`${command}`, { stdio: 'inherit'});
     } catch (e) {
         console.log('failed to exec ', e);
         return false;
@@ -30,8 +30,8 @@ if (!installedDeps) process.exit(-1);
 
 if (folderName) {
     console.log(`Copying specific folder: ${folderName}`);
-    const sourcePath = path.join(repoName, 'src', folderName);
-    const destinationPath = process.cwd(); // Copy to the current working directory
+    const sourcePath = path.join(process.cwd(), repoName, folderName);
+    const destinationPath = path.join(process.cwd(), folderName);
 
     try {
         fs.copySync(sourcePath, destinationPath, { overwrite: true });
