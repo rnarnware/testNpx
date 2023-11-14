@@ -38,7 +38,8 @@ if (filesToCopy.length > 0) {
     filesToCopy.forEach(folder => {
         const sourcePath = path.join(__dirname, `src/${folder}`);
         const destinationPath = path.join(__dirname, repoName, folder);
-
+        console.log(sourcePath, "sourcePath");
+        console.log(destinationPath, "destinationPath");
         if (fs.existsSync(sourcePath)) {
             try {
                 fs.copyFileSync(sourcePath, destinationPath);
