@@ -52,7 +52,7 @@ if (filesToCopy.length > 0) {
     });
 } else {
     console.log('Copying the entire template repository');
-    const sourcePath = path.join(__dirname, 'path/to/your/template');
+    const sourcePath = path.join(__dirname); // Include '..' to go up one level from the current directory
     const destinationPath = path.join(__dirname, repoName);
 
     try {
