@@ -30,7 +30,7 @@ if (!installedDeps) process.exit(-1);
 
 if (folderName) {
     console.log(`Copying specific folder: ${folderName}`);
-    const sourcePath = path.join(process.cwd(), repoName, src, folderName);
+    const sourcePath = path.join(process.cwd(), repoName, 'src', folderName);
     const destinationPath = path.join(process.cwd(), folderName);
     console.log(sourcePath, "sourcePath");
 
