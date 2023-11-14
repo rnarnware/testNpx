@@ -30,12 +30,12 @@ if (!installedDeps) process.exit(-1);
 
 if (folderName) {
     console.log(`Copying specific folder: ${folderName}`);
-    const sourcePath = path.join(process.cwd(), repoName);
+    const sourcePath = path.join(process.cwd(), repoName, folderName);
     const destinationPath = process.cwd(); // Copy to the current working directory
 
     try {
         fs.copySync(sourcePath, destinationPath, { overwrite: true });
-        console.log(`Copied everything in ${repoName} to ${destinationPath}`);
+        console.log(`Copied ${folderName} to ${destinationPath}`);
         console.log(`Congrats! Happy hacking in ${folderName}`);
     } catch (err) {
         console.error('Error copying the folder:', err);
