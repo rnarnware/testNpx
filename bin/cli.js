@@ -55,4 +55,8 @@ if (!sparseCheckout) {
     process.exit(-1);
 }
 
+console.log(`List of files in ${repoPath}:`);
+const fileList = fs.readdirSync(repoPath);
+console.log(fileList);
+
 console.log(`Congrats! Happy hacking`);
