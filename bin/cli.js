@@ -22,10 +22,12 @@ if (!repoName || !folderName) {
 }
 
 const gitRepoURL = 'https://github.com/rnarnware/testNpx';
+const repoPath = path.join(__dirname, repoName);
+const folderPath = path.join(repoPath, folderName);
 const gitCheckoutCommand = `git clone --depth 1 --filter=blob:none --no-checkout ${gitRepoURL} ${repoName}`;
 const gitSparseCheckoutCommand = `cd ${repoName} && git sparse-checkout set ${folderName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
-const installFolderDepsCommand = `cd ${repoName}/${folderName} && npm install`;
+const installFolderDepsCommand = `cd ${folderPath} && npm install`;
 
 console.log(`Cloning the repo with name ${repoName}`);
 const checkout = runCommand(gitCheckoutCommand);
