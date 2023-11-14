@@ -27,7 +27,7 @@ const folderPath = path.join(repoPath, folderName);
 const gitCheckoutCommand = `git clone --depth 1 --filter=blob:none --no-checkout ${gitRepoURL} ${repoName}`;
 const gitSparseCheckoutCommand = `cd ${repoName} && git sparse-checkout set ${folderName}`;
 const installDepsCommand = `cd ${repoPath} && npm install`;
-const installFolderDepsCommand = `cd ${folderPath} && npm install`;
+// const installFolderDepsCommand = `cd ${folderPath} && npm install`;
 
 console.log(`Cloning the repo with name ${repoName}`);
 const checkout = runCommand(gitCheckoutCommand, __dirname);
@@ -53,11 +53,11 @@ if (!sparseCheckout) {
 }
 
 console.log(`Installing dependencies for the specified folder: ${folderName}`);
-const installedFolderDeps = runCommand(installFolderDepsCommand, __dirname);
+// const installedFolderDeps = runCommand(installFolderDepsCommand, __dirname);
 
-if (!installedFolderDeps) {
-    console.log(`Failed to install dependencies for ${folderName}`);
-    process.exit(-1);
-}
+// if (!installedFolderDeps) {
+//     console.log(`Failed to install dependencies for ${folderName}`);
+//     process.exit(-1);
+// }
 
 console.log(`Congrats! Happy hacking`);
