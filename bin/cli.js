@@ -25,12 +25,20 @@ const gitRepoURL = 'https://github.com/rnarnware/testNpx';
 const gitCheckoutCommand = `git clone --depth 1 --filter=blob:none --no-checkout ${gitRepoURL} ${repoName}`;
 const gitSparseCheckoutCommand = `cd ${repoName} && git sparse-checkout set ${folderName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
+const installFolderDepsCommand = `cd ${repoName}/${folderName} && npm install`;
 
 console.log(`Cloning the repo with name ${repoName}`);
 const checkout = runCommand(gitCheckoutCommand);
 
 if (!checkout) {
     console.log('Failed to clone the repository');
+    process.exit(-1);
+}
+
+console.log('Installing all dependencies for ', repoName);
+const installedDeps = runCommand(installDepsCommand);
+if (!installedDeps) {
+    console.log('Failed to install dependencies');
     process.exit(-1);
 }
 
@@ -42,10 +50,11 @@ if (!sparseCheckout) {
     process.exit(-1);
 }
 
-console.log('Installing dependencies for ', repoName);
-const installedDeps = runCommand(installDepsCommand);
-if (!installedDeps) {
-    console.log('Failed to install dependencies');
+console.log(`Installing dependencies for the specified folder: ${folderName}`);
+const installedFolderDeps = runCommand(installFolderDepsCommand);
+
+if (!installedFolderDeps) {
+    console.log(`Failed to install dependencies for ${folderName}`);
     process.exit(-1);
 }
 
