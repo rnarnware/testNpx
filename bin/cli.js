@@ -5,7 +5,7 @@ const path = require('path');
 
 const runCommand = command => {
     try {
-        execSync(`${command}`, { stdio: 'inherit'});
+        execSync(`${command}`, { stdio: 'inherit' });
     } catch (e) {
         console.log('failed to exec ', e);
         return false;
@@ -28,6 +28,8 @@ const installedDeps = runCommand(installDepsCommand);
 
 if (!installedDeps) process.exit(-1);
 
+const copiedFolders = [];
+
 if (folderNames.length > 0) {
     console.log(`Copying specific folders: ${folderNames.join(', ')}`);
     
@@ -38,14 +40,19 @@ if (folderNames.length > 0) {
         try {
             fs.copySync(sourcePath, destinationPath, { overwrite: true });
             console.log(`Copied ${folderName} to ${destinationPath}`);
+            copiedFolders.push(folderName);
         } catch (err) {
             console.error(`Error copying the folder ${folderName}:`, err);
-        } // Delete the cloned repository after copying the folder
-        fs.removeSync(repoName);
-        // console.log(`Deleted the cloned repository: ${repoName}`);
+        }
     });
 
-    console.log(`successfully cloned ${folderNames.join(', ')}`);
+    if (copiedFolders.length === folderNames.length) {
+        // Delete the cloned repository after copying all the specified folders
+        fs.removeSync(repoName);
+        console.log(`Deleted the cloned repository: ${repoName}`);
+    } else {
+        console.log(`Error: Not all folders were copied successfully. Repository not deleted.`);
+    }
 } else {
     console.log(`Congrats! Happy hacking in ${repoName}`);
 }
