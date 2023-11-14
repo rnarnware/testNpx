@@ -3,9 +3,9 @@ const { execSync } = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
 
-const runCommand = command => {
+const runCommand = (command, cwd) => {
     try {
-        execSync(`${command}`, { stdio: 'inherit' });
+        execSync(`${command}`, { stdio: 'inherit', cwd });
     } catch (e) {
         console.log('failed to exec ', e);
         return false;
@@ -26,11 +26,11 @@ const repoPath = path.join(__dirname, repoName);
 const folderPath = path.join(repoPath, folderName);
 const gitCheckoutCommand = `git clone --depth 1 --filter=blob:none --no-checkout ${gitRepoURL} ${repoName}`;
 const gitSparseCheckoutCommand = `cd ${repoName} && git sparse-checkout set ${folderName}`;
-const installDepsCommand = `cd ${repoName} && npm install`;
+const installDepsCommand = `cd ${repoPath} && npm install`;
 const installFolderDepsCommand = `cd ${folderPath} && npm install`;
 
 console.log(`Cloning the repo with name ${repoName}`);
-const checkout = runCommand(gitCheckoutCommand);
+const checkout = runCommand(gitCheckoutCommand, __dirname);
 
 if (!checkout) {
     console.log('Failed to clone the repository');
@@ -38,14 +38,14 @@ if (!checkout) {
 }
 
 console.log('Installing all dependencies for ', repoName);
-const installedDeps = runCommand(installDepsCommand);
+const installedDeps = runCommand(installDepsCommand, __dirname);
 if (!installedDeps) {
     console.log('Failed to install dependencies');
     process.exit(-1);
 }
 
 console.log(`Checking out the specific folder: ${folderName}`);
-const sparseCheckout = runCommand(gitSparseCheckoutCommand);
+const sparseCheckout = runCommand(gitSparseCheckoutCommand, __dirname);
 
 if (!sparseCheckout) {
     console.log(`Failed to checkout the specific folder: ${folderName}`);
@@ -53,7 +53,7 @@ if (!sparseCheckout) {
 }
 
 console.log(`Installing dependencies for the specified folder: ${folderName}`);
-const installedFolderDeps = runCommand(installFolderDepsCommand);
+const installedFolderDeps = runCommand(installFolderDepsCommand, __dirname);
 
 if (!installedFolderDeps) {
     console.log(`Failed to install dependencies for ${folderName}`);
