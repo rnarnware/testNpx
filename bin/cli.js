@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 const runCommand = command => {
