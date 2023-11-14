@@ -36,7 +36,7 @@ if (!installedDeps) {
 if (filesToCopy.length > 0) {
     console.log('Copying specific files/folders');
     filesToCopy.forEach(folder => {
-        const sourcePath = path.join(__dirname, folder);
+        const sourcePath = path.join(__dirname, `src/${folder}`);
         const destinationPath = path.join(__dirname, repoName, folder);
 
         if (fs.existsSync(sourcePath)) {
